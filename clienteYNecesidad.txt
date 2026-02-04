@@ -1,0 +1,1 @@
+El cliente va a ser una trabajadora de la empresa TGI la cual trabaja en el ámbito de capacitaciones y las bases de datos de esta. Lo que vamos a hacer es optimizar el almacenamiento de datos en la base (la cual es alimentada de otras 2 anteriores) y la visualización de las mismas.
