@@ -1,0 +1,1 @@
+La necesidad que va a suplir esta base de datos es identificar en que año entre el rango 2000-2024 hubo más muertes por conflicto armado en cada país.
