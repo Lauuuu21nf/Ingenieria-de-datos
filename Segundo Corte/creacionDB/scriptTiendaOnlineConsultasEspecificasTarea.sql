@@ -185,9 +185,38 @@ select * from productos where  nombreProducto like '%m' order by precioProducto 
 
 -- -Multitabla
 
--- -operancionesCalculadas
+-- -operacionesCalculadas normalmente con tipo entero
+select count(*) as Total, AVG(precioProducto) as PromedioPrecio,
+max(precioProducto) as PrecioMaximo,
+min(precioProducto) as PrecioMinimo,
+sum(stoProdT) as StockTotal
+from productos;
+describe clientes;
 
--- -Agrupadas
+SELECT UPPER(nombreCliente) AS nombreUpper
+FROM clientes;
+
+SELECT CONCAT(nombreCliente, emailCliente) AS nombreEmail
+FROM clientes;
+
+SELECT CONCAT(UPPER(nombreCliente)," ", emailCliente) AS nombreEmail
+FROM clientes;
+
+SELECT nombreCliente as nombre,
+length(nombreCliente) as largoNombre
+from clientes;
+
+
+
+-- -Agrupadas: Group by ola tamo <3 SELECT camposConsultar from nombreTabla group by campoAgrupar
+describe productos;
+SELECT * from productos group by categoriaProducto;
+
+select categoriaProducto, count(*) as cantidad, avg(precioProducto) as promedioMedio
+FROM productos
+group by categoriaProducto
+having avg(precioProducto) > 5000
+order by promedioMedio desc;
 
 -- -Ordenadas: SELECT campos FROM nombre_tabla order by campo_a_ordenar formaOrden (ASC para menor a mayor DESC para mayor a menor)
 select nombreProducto as Nombre_Producto, stoProdT as stock
@@ -299,5 +328,22 @@ WHERE fechaPedido LIKE '2026-03%';
 SELECT cantidadProducto AS cantidad
 FROM pedido
 WHERE cantidadProducto >= 5;
+
+use tiendaOnline;
+
+-- Carga de archivos
+LOAD DATA INFILE '"C:\Users\prestamour\Downloads\clientes.csv"'
+into table clientes
+fields terminated by ','
+enclosed by '"'
+lines terminated by '\n'
+ignore 1 rows;
+
+set foreign_key_checks = 0;  -- desactivar llaves mientras se hace la importacion de los datos
+set foreign_key_checks = 1;  -- activar llaves luego de hacer la importacion de los datos
+
+describe pedido;
+select format (precioProducto,2,'es_CO') as precio  -- para cambiar el formato a pesos colombianos
+from productos;
 
 DROP DATABASE IF EXISTS tiendaOnline;
