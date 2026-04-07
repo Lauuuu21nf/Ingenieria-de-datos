@@ -3,40 +3,40 @@ use nuevaBaseEmpleados;
 
 
 create table producto(
-idProducto int primary key auto_increment,
+idProducto int primary key,
 nombreProducto varchar(20),
-precioProducto double,
+precioProducto decimal(10, 2),
 categoriaProducto varchar(20)
 );
 
 create table departamento(
-idDepartamento int primary key auto_increment,
+idDepartamento int primary key,
 nombreDepartamento varchar(20)
 );
 
 create table empleados(
-idEmpleados int primary key auto_increment,
+idEmpleado int primary key,
 nombreEmpleado varchar(20),
 idDeptoFK int,
 foreign key (idDeptoFK) references departamento(idDepartamento),
-salarioEmpleado double
+salarioEmpleado decimal(10, 2)
 );
 
-insert into empleados(nombreEmpleado, salarioEmpleado, idDeptoFK) values ('Juan',  100000, 'Huila'),
-('JuanDa',  100000, 'Huila'),
-('JuanFe',  20000, 'La Vega'),
-('JuanMa',  300000, 'Mosquera'),
-('JuanSe',  5000000, 'Mosquera');
+insert into empleados(idEmpleado, nombreEmpleado, salarioEmpleado, idDeptoFK) values (1, 'Juan',  100000, 1),
+(2, 'JuanDa',  100000, 2),
+(3, 'JuanFe',  20000, 3),
+(4, 'JuanMa',  300000, 2),
+(5, 'JuanSe',  5000000, 1);
 
-insert into departamento(nombreDepartamento) values ('Huila'),
-('Mosquera'),
-('La Vega');
+insert into departamento(idDepartamento, nombreDepartamento) values (1, 'Huila'),
+(2, 'Mosquera'),
+(3, 'La Vega');
 
-insert into producto(nombreProducto, precioProducto, categoriaProducto) values ('Lente', 10000, 'Lacteos'),
-('Pan', 20, 'Electronica'),
-('Queso', 300, 'Lacteos'),
-('Lechuga', 60000, 'Veggies'),
-('Pepinillos', 9000, 'Veggies');
+insert into producto(idProducto, nombreProducto, precioProducto, categoriaProducto) values (1, 'Lente', 10000, 'Lacteos'),
+(2, 'Pan', 20, 'Electronica'),
+(3, 'Queso', 300, 'Lacteos'),
+(4, 'Lechuga', 60000, 'Veggies'),
+(5, 'Pepinillos', 9000, 'Veggies');
 
 drop database nuevaBaseEmpleados; 
 
@@ -57,17 +57,20 @@ from departamento
 where nombreDepartamento in ('Huila', 'La Vega'));
 
 -- tabla derivada
-select idDepartamento, promedio_salario
+select idDeptoFK, promedio_salario
 from
-(select idDepartamento, AVG(salarioEmpleado) as promedio_salario
+(select idDeptoFK, AVG(salarioEmpleado) as promedio_salario
 from empleados
-group by idDepartamento) as promedios -- toda la consulta se va a llamar promedios
+group by idDeptoFK) as promedios -- toda la consulta se va a llamar promedios
 where promedio_salario > 1000;                                
 -- como es una tabla virtual que no existe en la base, el from va a venir de la tabla que se crea de la consulta, por eso se pone el select dentro del from
 
-select nombreEmpleado, salarioEmpleado, prom_general, desv_promedio
-from
-(select salarioEmpleado, AVG(salarioEmpleado) as prom_general 
-from 
-(select salarioEmpleado, )
+select nombreEmpleado, salarioEmpleado, 
+(select AVG(salarioEmpleado) from empleados) as prom_general, 
+salarioEmpleado - (select AVG(salarioEmpleado) from empleados) as desv_promedio
+from empleados;
 
+select nombreProducto, precioProducto
+from producto
+where precioProducto > (select AVG(precioProducto) from producto)
+order by precioProducto desc;
