@@ -38,6 +38,9 @@ insert into producto(idProducto, nombreProducto, precioProducto, categoriaProduc
 (4, 'Lechuga', 60000, 'Veggies'),
 (5, 'Pepinillos', 9000, 'Veggies');
 
+insert into producto(idProducto, nombreProducto, precioProducto, categoriaProducto) values (6, 'Cable Unifilar', 5000000, 'Carnes');
+insert into producto(idProducto, nombreProducto, precioProducto, categoriaProducto) values (7, 'Cable inalambrico', 5000000, 'Carnes');
+
 drop database nuevaBaseEmpleados; 
 
 /* subconsulta */
@@ -74,3 +77,62 @@ select nombreProducto, precioProducto
 from producto
 where precioProducto > (select AVG(precioProducto) from producto)
 order by precioProducto desc;
+
+select * from producto;
+
+create table pedido(
+idPedido int primary key,
+idEmpleadoFK int,
+foreign key (idEmpleadoFK) references empleados(idEmpleado),
+fechaPedido datetime,
+estadoPedido varchar(20),
+cantidad int,
+precioUnidad decimal(10, 2)
+);
+
+create table detallePedido(
+idDetallePedido int primary key,
+idProductoFK int,
+foreign key (idProductoFK) references producto(idProducto),
+idEmpleadoFK int,
+foreign key (idEmpleadoFK) references empleados(idEmpleado)
+);
+
+insert into pedido(idPedido, idEmpleado, fechaPedido, estadoPedido, cantidad, precioUnidad) values (1, 1, 25-03-26, 'entregado', 2, 20000)
+-- Consultas multitabla min 2 tablas
+-- JOINS se pueden hacer así las tablas no estén relacionadas entre sí
+
+-- LEFT muestra todas las filas de la tabla izquierda más las que tiene coincidencia con la derecha, si no existe, muestra un join 
+-- la que ponga primera en la sintaxis es la izquierda y la otra es la derecha
+
+-- RIGHT muestra todas las filas de la tabla derecha más las que tiene coincidencia con la izquierda, si no existe, muestra un join 
+
+-- FULL (INNER) solo muestra las filas que tiene coincidencia en ambas tablas (intersección)
+
+-- CROSS producto cartesiano, muestra todas las posibles combinaciones que hay entre las n tablas
+
+-- selfJoin es consultas consigo mismo
+
+-- se le ponen identificadores a las tablas (digamos empleado es e), luego para identificar se hace e.nombre
+
+-- pedidos con el nombre del clientes muestra los clientes que tengan pedido
+select p.idPedido, 
+e.nombreEmpleado as clente,
+d.idDepartamento,
+p.fechaPedido,
+p.estadoPedido,
+p.cantidad
+from pedido p
+inner join cliente c on p.idClienteFK = c.idCliente
+order by p.fecha desc;
+
+-- clientes que aun no tengan pedido
+select 
+e.nombreEmpleado as cliente,
+d.idDepartamento,
+count(p.idPedido) as totalPedido
+from empleados e
+left join pedido p on e.idEmpleado = p.idEmpleadoFK
+order by p.fecha desc;
+
+--  mostrar el detalle completo de los pedidos cliente, que pedidos tiene y ese pedido que productos tiene agregado clientes-pedido-producto
