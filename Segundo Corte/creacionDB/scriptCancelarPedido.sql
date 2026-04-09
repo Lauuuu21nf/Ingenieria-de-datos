@@ -296,6 +296,7 @@ BEGIN
         END IF;
 END //
 DELIMITER ;
+CALL cancelarPedido(3, 1, @msg);
 
 ALTER TABLE producto
 ADD stockProducto INT;
