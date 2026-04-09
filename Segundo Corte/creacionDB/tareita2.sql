@@ -22,6 +22,7 @@ foreign key (idDeptoFK) references departamento(idDepartamento),
 salarioEmpleado decimal(10, 2)
 );
 
+select * from departamento;
 insert into empleados(idEmpleado, nombreEmpleado, salarioEmpleado, idDeptoFK) values (1, 'Juan',  100000, 1),
 (2, 'JuanDa',  100000, 2),
 (3, 'JuanFe',  20000, 3),
@@ -94,11 +95,23 @@ create table detallePedido(
 idDetallePedido int primary key,
 idProductoFK int,
 foreign key (idProductoFK) references producto(idProducto),
-idEmpleadoFK int,
-foreign key (idEmpleadoFK) references empleados(idEmpleado)
+idPedidoFK int,
+foreign key (idPedidoFK) references pedido(idPedido)
 );
 
-insert into pedido(idPedido, idEmpleado, fechaPedido, estadoPedido, cantidad, precioUnidad) values (1, 1, 25-03-26, 'entregado', 2, 20000)
+insert into pedido(idPedido, idEmpleadoFK, fechaPedido, estadoPedido, cantidad, precioUnidad) values (1, 1, '2026-03-25', 'entregado', 2, 20000),
+(2, 2, '2026-03-25', 'pendiente', 3, 30000),
+(3, 3, '2026-03-25', 'preparando', 3, 40000);
+
+insert into detallePedido(idDetallePedido, idProductoFK, idPedidoFK) values (1, 1, 1),
+(2, 1, 1),
+(3, 1, 1);
+
+insert into detallePedido(idDetallePedido, idProductoFK, idPedidoFK) values (4, 2, 1),
+(5, 3, 1);
+
+insert into detallePedido(idDetallePedido, idProductoFK, idPedidoFK) values (6, 2, 2),
+(7, 3, 3);
 -- Consultas multitabla min 2 tablas
 -- JOINS se pueden hacer así las tablas no estén relacionadas entre sí
 
@@ -136,3 +149,15 @@ left join pedido p on e.idEmpleado = p.idEmpleadoFK
 order by p.fecha desc;
 
 --  mostrar el detalle completo de los pedidos cliente, que pedidos tiene y ese pedido que productos tiene agregado clientes-pedido-producto
+select
+e.nombreEmpleado as empleado,
+p.idPedido,
+p.fechaPedido,
+p.estadoPedido,
+p.cantidad,
+pr.nombreProducto as producto
+from empleados e
+inner join pedido p on p.idEmpleadoFK = e.idEmpleado
+inner join detallePedido d on d.idPedidoFK = p.idPedido 
+inner join producto pr on pr.idProducto = d.idProductoFK
+where e.idEmpleado = 3;
