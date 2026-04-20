@@ -105,3 +105,7 @@ INSERT INTO historial_salarios(medico_id, salario_anterior, salario_nuevo, motiv
 
 DESCRIBE historial_salarios;
 SELECT * FROM historial_salarios;
+DESCRIBE medicos;
+DESCRIBE consultas;
+SELECT * FROM medicos;
+
