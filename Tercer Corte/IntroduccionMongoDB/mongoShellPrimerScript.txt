@@ -1,0 +1,632 @@
+mongo Atlas para un desarrollo con acceso a internet remoto. Plataforma
+En consola se tiene que copiar y pegar el script(help)
+Se crea con el USE
+Todas las colecciones van el minuscula
+
+cuando se inserta solo un documento se hace 
+db.asistencia.insertOne({comentariosCapacitacion: "Muy bien", asistio: 1})
+
+
+cuando se insertan varios documentos, se hace como si fuera un array, entonces queda 
+db.trabajadores.insertMany([{nombre: "Tatiana", empresaDondeTrabaja: "UROSARIO", documentoTrabajador: 1024435808},{nombre: "José", empresaDondeTrabaja: "SENA", documentoTrabajador: 254684154}])
+
+
+para consultar que los elementos se hayan creado
+db.trabajadores.find()
+
+lo mismo de arriba pero para que se vea con una mejor estructura
+db.trabajadores.find().pretty()
+
+si solo queremos buscar UN documento queda
+db.usuario.findOne({'nombreUsuario': "Xavier Enrique Naar Amaris"})
+
+buscar con OR
+db.usuario.find({$or: [{rolUsuario: "admin"}, {estadoUsuario: "activo"}]})
+
+buscar con AND
+db.usuario.find({$and: [{rolUsuario: "admin"}, {estadoUsuario: "activo"}]})
+
+siempre que se pone $ significa que va a buscar un valor
+
+buscar diferentes a lo que se especifica
+db.trabajadores.find({empresaDondeTrabaja: {$ne: "TGI"}})
+
+consulta implícita es un AND, entonces solo se separa por una coma las propiedades y valores
+{$gte: 18, $lte: 30}
+
+db.collection.find({country: {$in["EEUU", "Col"]}})
+
+buscar si existe un documento con un valor, o es true o es false (en el ejemplo, si tiene telefono)
+db.collection.find({telefono: {$exists: true}})
+
+
+si se van a hacer estas mismas consultas en compass, solo se copia lo que esta adentro de los corchetes
+
+cambiar todos los total
+db.productos.updateMany({}, [{$set: {total: {$multiply: ["$precioUnitario", "$cantidad"]}}}])
+
+cantidad precio unitario categoría total
+10 registros
+
+
+/*Crear base de datos*/
+use tgi
+switched to db tgi
+// verificar que la base de datos esté creada
+db
+tgi
+// crear una colección
+// crear una colección
+db.createCollection("asistencia")
+{ ok: 1 }
+// mostrar las bases de datos 
+show dbs
+admin    40.00 KiB
+config  108.00 KiB
+local    88.00 KiB
+tgi     364.00 KiB
+tienda    8.00 KiB
+// mostrar las colecciones que tiene esa base de datos
+show collections 
+asistencia
+capacitacion
+cargo
+centroTrabajo
+programa
+programacion
+responsable
+trabajadores
+usuario
+// crear un documento en la colección
+db.asistencia.insert({comentariosCapacitacion: "Muy bien", asistio: 1})
+DeprecationWarning: Collection.insert() is deprecated. Use insertOne, insertMany, or bulkWrite.
+{
+  acknowledged: true,
+  insertedIds: {
+    '0': ObjectId('69f8ecbdc9c2afdb638e3671')
+  }
+}
+db.trabajadores.insertMany([{nombre: "Tatiana", empresaDondeTrabaja: "UROSARIO", documentoTrabajador: 1024435808},{nombre: "José", empresaDondeTrabaja: "SENA", documentoTrabajador: 254684154}])
+{
+  acknowledged: true,
+  insertedIds: {
+    '0': ObjectId('69f8edadc9c2afdb638e3672'),
+    '1': ObjectId('69f8edadc9c2afdb638e3673')
+  }
+}
+// consultar documentos creados 
+db.trabajadores.find()
+{
+  _id: ObjectId('69f3af5371df916e0326ac6a'),
+  nombreTrabajador: 'Carlos Andres Peña Rios',
+  empresaDondeTrabaja: 'TGI',
+  documentoTrabajador: 1045678901,
+  idCentroTrabajoFK: 1,
+  idCargoFK: 3
+}
+{
+  _id: ObjectId('69f3af5371df916e0326ac6b'),
+  nombreTrabajador: 'Maria Fernanda Lopez Arce',
+  empresaDondeTrabaja: 'TGI',
+  documentoTrabajador: 1032456789,
+  idCentroTrabajoFK: 1,
+  idCargoFK: 12
+}
+{
+  _id: ObjectId('69f3af5371df916e0326ac6c'),
+  nombreTrabajador: 'Jorge Enrique Molina Vega',
+  empresaDondeTrabaja: 'TGI',
+  documentoTrabajador: 79456123,
+  idCentroTrabajoFK: 2,
+  idCargoFK: 1
+}
+{
+  _id: ObjectId('69f3af5371df916e0326ac6d'),
+  nombreTrabajador: 'Luis Alfredo Torres Gomez',
+  empresaDondeTrabaja: 'TGI',
+  documentoTrabajador: 80134567,
+  idCentroTrabajoFK: 2,
+  idCargoFK: 2
+}
+{
+  _id: ObjectId('69f3af5371df916e0326ac6e'),
+  nombreTrabajador: 'Diana Marcela Ruiz Herrera',
+  empresaDondeTrabaja: 'TGI',
+  documentoTrabajador: 1076543210,
+  idCentroTrabajoFK: 3,
+  idCargoFK: 7
+}
+{
+  _id: ObjectId('69f3af5371df916e0326ac6f'),
+  nombreTrabajador: 'Andres Felipe Castro Mora',
+  empresaDondeTrabaja: 'TGI',
+  documentoTrabajador: 1023456789,
+  idCentroTrabajoFK: 3,
+  idCargoFK: 6
+}
+{
+  _id: ObjectId('69f3af5371df916e0326ac70'),
+  nombreTrabajador: 'Sandra Patricia Vargas Diaz',
+  empresaDondeTrabaja: 'TGI',
+  documentoTrabajador: 52678901,
+  idCentroTrabajoFK: 4,
+  idCargoFK: 8
+}
+{
+  _id: ObjectId('69f3af5371df916e0326ac71'),
+  nombreTrabajador: 'Ricardo Emilio Suarez Leon',
+  empresaDondeTrabaja: 'TGI',
+  documentoTrabajador: 71234890,
+  idCentroTrabajoFK: 4,
+  idCargoFK: 3
+}
+{
+  _id: ObjectId('69f3af5371df916e0326ac72'),
+  nombreTrabajador: 'Paula Andrea Jimenez Cruz',
+  empresaDondeTrabaja: 'TGI',
+  documentoTrabajador: 1098765432,
+  idCentroTrabajoFK: 5,
+  idCargoFK: 9
+}
+{
+  _id: ObjectId('69f3af5371df916e0326ac73'),
+  nombreTrabajador: 'John Freddy Ramirez Pinto',
+  empresaDondeTrabaja: 'TGI',
+  documentoTrabajador: 91234567,
+  idCentroTrabajoFK: 5,
+  idCargoFK: 10
+}
+{
+  _id: ObjectId('69f3af5371df916e0326ac74'),
+  nombreTrabajador: 'Angela Maria Ospina Soto',
+  empresaDondeTrabaja: 'TGI',
+  documentoTrabajador: 1065432198,
+  idCentroTrabajoFK: 6,
+  idCargoFK: 11
+}
+{
+  _id: ObjectId('69f3af5371df916e0326ac75'),
+  nombreTrabajador: 'Hector Fabio Mendoza Ruiz',
+  empresaDondeTrabaja: 'TGI',
+  documentoTrabajador: 79012345,
+  idCentroTrabajoFK: 6,
+  idCargoFK: 18
+}
+{
+  _id: ObjectId('69f3af5371df916e0326ac76'),
+  nombreTrabajador: 'Viviana Paola Guerrero Alba',
+  empresaDondeTrabaja: 'TGI',
+  documentoTrabajador: 1054321987,
+  idCentroTrabajoFK: 7,
+  idCargoFK: 5
+}
+{
+  _id: ObjectId('69f3af5371df916e0326ac77'),
+  nombreTrabajador: 'Camilo Augusto Nieto Ramos',
+  empresaDondeTrabaja: 'TGI',
+  documentoTrabajador: 80876543,
+  idCentroTrabajoFK: 7,
+  idCargoFK: 23
+}
+{
+  _id: ObjectId('69f3af5371df916e0326ac78'),
+  nombreTrabajador: 'Beatriz Elena Cardona Meza',
+  empresaDondeTrabaja: 'TGI',
+  documentoTrabajador: 43876543,
+  idCentroTrabajoFK: 8,
+  idCargoFK: 19
+}
+{
+  _id: ObjectId('69f3af5371df916e0326ac79'),
+  nombreTrabajador: 'Oscar Ivan Calderon Pena',
+  empresaDondeTrabaja: 'TGI',
+  documentoTrabajador: 79543210,
+  idCentroTrabajoFK: 8,
+  idCargoFK: 22
+}
+{
+  _id: ObjectId('69f3af5371df916e0326ac7a'),
+  nombreTrabajador: 'Liliana Marcela Reyes Cano',
+  empresaDondeTrabaja: 'TGI',
+  documentoTrabajador: 1087654321,
+  idCentroTrabajoFK: 9,
+  idCargoFK: 4
+}
+{
+  _id: ObjectId('69f3af5371df916e0326ac7b'),
+  nombreTrabajador: 'Ferney Andres Aguilar Leal',
+  empresaDondeTrabaja: 'TGI',
+  documentoTrabajador: 91876543,
+  idCentroTrabajoFK: 9,
+  idCargoFK: 1
+}
+{
+  _id: ObjectId('69f3af5371df916e0326ac7c'),
+  nombreTrabajador: 'Natalia Esperanza Vidal Torres',
+  empresaDondeTrabaja: 'TGI',
+  documentoTrabajador: 1043219876,
+  idCentroTrabajoFK: 10,
+  idCargoFK: 7
+}
+{
+  _id: ObjectId('69f3af5371df916e0326ac7d'),
+  nombreTrabajador: 'Juan Pablo Morales Blanco',
+  empresaDondeTrabaja: 'TGI',
+  documentoTrabajador: 80654321,
+  idCentroTrabajoFK: 10,
+  idCargoFK: 13
+}
+Type "it" for more
+db.trabajadores.find().pretty()
+{
+  _id: ObjectId('69f3af5371df916e0326ac6a'),
+  nombreTrabajador: 'Carlos Andres Peña Rios',
+  empresaDondeTrabaja: 'TGI',
+  documentoTrabajador: 1045678901,
+  idCentroTrabajoFK: 1,
+  idCargoFK: 3
+}
+{
+  _id: ObjectId('69f3af5371df916e0326ac6b'),
+  nombreTrabajador: 'Maria Fernanda Lopez Arce',
+  empresaDondeTrabaja: 'TGI',
+  documentoTrabajador: 1032456789,
+  idCentroTrabajoFK: 1,
+  idCargoFK: 12
+}
+{
+  _id: ObjectId('69f3af5371df916e0326ac6c'),
+  nombreTrabajador: 'Jorge Enrique Molina Vega',
+  empresaDondeTrabaja: 'TGI',
+  documentoTrabajador: 79456123,
+  idCentroTrabajoFK: 2,
+  idCargoFK: 1
+}
+{
+  _id: ObjectId('69f3af5371df916e0326ac6d'),
+  nombreTrabajador: 'Luis Alfredo Torres Gomez',
+  empresaDondeTrabaja: 'TGI',
+  documentoTrabajador: 80134567,
+  idCentroTrabajoFK: 2,
+  idCargoFK: 2
+}
+{
+  _id: ObjectId('69f3af5371df916e0326ac6e'),
+  nombreTrabajador: 'Diana Marcela Ruiz Herrera',
+  empresaDondeTrabaja: 'TGI',
+  documentoTrabajador: 1076543210,
+  idCentroTrabajoFK: 3,
+  idCargoFK: 7
+}
+{
+  _id: ObjectId('69f3af5371df916e0326ac6f'),
+  nombreTrabajador: 'Andres Felipe Castro Mora',
+  empresaDondeTrabaja: 'TGI',
+  documentoTrabajador: 1023456789,
+  idCentroTrabajoFK: 3,
+  idCargoFK: 6
+}
+{
+  _id: ObjectId('69f3af5371df916e0326ac70'),
+  nombreTrabajador: 'Sandra Patricia Vargas Diaz',
+  empresaDondeTrabaja: 'TGI',
+  documentoTrabajador: 52678901,
+  idCentroTrabajoFK: 4,
+  idCargoFK: 8
+}
+{
+  _id: ObjectId('69f3af5371df916e0326ac71'),
+  nombreTrabajador: 'Ricardo Emilio Suarez Leon',
+  empresaDondeTrabaja: 'TGI',
+  documentoTrabajador: 71234890,
+  idCentroTrabajoFK: 4,
+  idCargoFK: 3
+}
+{
+  _id: ObjectId('69f3af5371df916e0326ac72'),
+  nombreTrabajador: 'Paula Andrea Jimenez Cruz',
+  empresaDondeTrabaja: 'TGI',
+  documentoTrabajador: 1098765432,
+  idCentroTrabajoFK: 5,
+  idCargoFK: 9
+}
+{
+  _id: ObjectId('69f3af5371df916e0326ac73'),
+  nombreTrabajador: 'John Freddy Ramirez Pinto',
+  empresaDondeTrabaja: 'TGI',
+  documentoTrabajador: 91234567,
+  idCentroTrabajoFK: 5,
+  idCargoFK: 10
+}
+{
+  _id: ObjectId('69f3af5371df916e0326ac74'),
+  nombreTrabajador: 'Angela Maria Ospina Soto',
+  empresaDondeTrabaja: 'TGI',
+  documentoTrabajador: 1065432198,
+  idCentroTrabajoFK: 6,
+  idCargoFK: 11
+}
+{
+  _id: ObjectId('69f3af5371df916e0326ac75'),
+  nombreTrabajador: 'Hector Fabio Mendoza Ruiz',
+  empresaDondeTrabaja: 'TGI',
+  documentoTrabajador: 79012345,
+  idCentroTrabajoFK: 6,
+  idCargoFK: 18
+}
+{
+  _id: ObjectId('69f3af5371df916e0326ac76'),
+  nombreTrabajador: 'Viviana Paola Guerrero Alba',
+  empresaDondeTrabaja: 'TGI',
+  documentoTrabajador: 1054321987,
+  idCentroTrabajoFK: 7,
+  idCargoFK: 5
+}
+{
+  _id: ObjectId('69f3af5371df916e0326ac77'),
+  nombreTrabajador: 'Camilo Augusto Nieto Ramos',
+  empresaDondeTrabaja: 'TGI',
+  documentoTrabajador: 80876543,
+  idCentroTrabajoFK: 7,
+  idCargoFK: 23
+}
+{
+  _id: ObjectId('69f3af5371df916e0326ac78'),
+  nombreTrabajador: 'Beatriz Elena Cardona Meza',
+  empresaDondeTrabaja: 'TGI',
+  documentoTrabajador: 43876543,
+  idCentroTrabajoFK: 8,
+  idCargoFK: 19
+}
+{
+  _id: ObjectId('69f3af5371df916e0326ac79'),
+  nombreTrabajador: 'Oscar Ivan Calderon Pena',
+  empresaDondeTrabaja: 'TGI',
+  documentoTrabajador: 79543210,
+  idCentroTrabajoFK: 8,
+  idCargoFK: 22
+}
+{
+  _id: ObjectId('69f3af5371df916e0326ac7a'),
+  nombreTrabajador: 'Liliana Marcela Reyes Cano',
+  empresaDondeTrabaja: 'TGI',
+  documentoTrabajador: 1087654321,
+  idCentroTrabajoFK: 9,
+  idCargoFK: 4
+}
+{
+  _id: ObjectId('69f3af5371df916e0326ac7b'),
+  nombreTrabajador: 'Ferney Andres Aguilar Leal',
+  empresaDondeTrabaja: 'TGI',
+  documentoTrabajador: 91876543,
+  idCentroTrabajoFK: 9,
+  idCargoFK: 1
+}
+{
+  _id: ObjectId('69f3af5371df916e0326ac7c'),
+  nombreTrabajador: 'Natalia Esperanza Vidal Torres',
+  empresaDondeTrabaja: 'TGI',
+  documentoTrabajador: 1043219876,
+  idCentroTrabajoFK: 10,
+  idCargoFK: 7
+}
+{
+  _id: ObjectId('69f3af5371df916e0326ac7d'),
+  nombreTrabajador: 'Juan Pablo Morales Blanco',
+  empresaDondeTrabaja: 'TGI',
+  documentoTrabajador: 80654321,
+  idCentroTrabajoFK: 10,
+  idCargoFK: 13
+}
+Type "it" for more
+db.trabajadores.aggregate([{$match: {empresaDondeTrabaja: "TGI"}}])
+{
+  _id: ObjectId('69f3af5371df916e0326ac6a'),
+  nombreTrabajador: 'Carlos Andres Peña Rios',
+  empresaDondeTrabaja: 'TGI',
+  documentoTrabajador: 1045678901,
+  idCentroTrabajoFK: 1,
+  idCargoFK: 3
+}
+{
+  _id: ObjectId('69f3af5371df916e0326ac6b'),
+  nombreTrabajador: 'Maria Fernanda Lopez Arce',
+  empresaDondeTrabaja: 'TGI',
+  documentoTrabajador: 1032456789,
+  idCentroTrabajoFK: 1,
+  idCargoFK: 12
+}
+{
+  _id: ObjectId('69f3af5371df916e0326ac6c'),
+  nombreTrabajador: 'Jorge Enrique Molina Vega',
+  empresaDondeTrabaja: 'TGI',
+  documentoTrabajador: 79456123,
+  idCentroTrabajoFK: 2,
+  idCargoFK: 1
+}
+{
+  _id: ObjectId('69f3af5371df916e0326ac6d'),
+  nombreTrabajador: 'Luis Alfredo Torres Gomez',
+  empresaDondeTrabaja: 'TGI',
+  documentoTrabajador: 80134567,
+  idCentroTrabajoFK: 2,
+  idCargoFK: 2
+}
+{
+  _id: ObjectId('69f3af5371df916e0326ac6e'),
+  nombreTrabajador: 'Diana Marcela Ruiz Herrera',
+  empresaDondeTrabaja: 'TGI',
+  documentoTrabajador: 1076543210,
+  idCentroTrabajoFK: 3,
+  idCargoFK: 7
+}
+{
+  _id: ObjectId('69f3af5371df916e0326ac6f'),
+  nombreTrabajador: 'Andres Felipe Castro Mora',
+  empresaDondeTrabaja: 'TGI',
+  documentoTrabajador: 1023456789,
+  idCentroTrabajoFK: 3,
+  idCargoFK: 6
+}
+{
+  _id: ObjectId('69f3af5371df916e0326ac70'),
+  nombreTrabajador: 'Sandra Patricia Vargas Diaz',
+  empresaDondeTrabaja: 'TGI',
+  documentoTrabajador: 52678901,
+  idCentroTrabajoFK: 4,
+  idCargoFK: 8
+}
+{
+  _id: ObjectId('69f3af5371df916e0326ac71'),
+  nombreTrabajador: 'Ricardo Emilio Suarez Leon',
+  empresaDondeTrabaja: 'TGI',
+  documentoTrabajador: 71234890,
+  idCentroTrabajoFK: 4,
+  idCargoFK: 3
+}
+{
+  _id: ObjectId('69f3af5371df916e0326ac72'),
+  nombreTrabajador: 'Paula Andrea Jimenez Cruz',
+  empresaDondeTrabaja: 'TGI',
+  documentoTrabajador: 1098765432,
+  idCentroTrabajoFK: 5,
+  idCargoFK: 9
+}
+{
+  _id: ObjectId('69f3af5371df916e0326ac73'),
+  nombreTrabajador: 'John Freddy Ramirez Pinto',
+  empresaDondeTrabaja: 'TGI',
+  documentoTrabajador: 91234567,
+  idCentroTrabajoFK: 5,
+  idCargoFK: 10
+}
+{
+  _id: ObjectId('69f3af5371df916e0326ac74'),
+  nombreTrabajador: 'Angela Maria Ospina Soto',
+  empresaDondeTrabaja: 'TGI',
+  documentoTrabajador: 1065432198,
+  idCentroTrabajoFK: 6,
+  idCargoFK: 11
+}
+{
+  _id: ObjectId('69f3af5371df916e0326ac75'),
+  nombreTrabajador: 'Hector Fabio Mendoza Ruiz',
+  empresaDondeTrabaja: 'TGI',
+  documentoTrabajador: 79012345,
+  idCentroTrabajoFK: 6,
+  idCargoFK: 18
+}
+{
+  _id: ObjectId('69f3af5371df916e0326ac76'),
+  nombreTrabajador: 'Viviana Paola Guerrero Alba',
+  empresaDondeTrabaja: 'TGI',
+  documentoTrabajador: 1054321987,
+  idCentroTrabajoFK: 7,
+  idCargoFK: 5
+}
+{
+  _id: ObjectId('69f3af5371df916e0326ac77'),
+  nombreTrabajador: 'Camilo Augusto Nieto Ramos',
+  empresaDondeTrabaja: 'TGI',
+  documentoTrabajador: 80876543,
+  idCentroTrabajoFK: 7,
+  idCargoFK: 23
+}
+{
+  _id: ObjectId('69f3af5371df916e0326ac78'),
+  nombreTrabajador: 'Beatriz Elena Cardona Meza',
+  empresaDondeTrabaja: 'TGI',
+  documentoTrabajador: 43876543,
+  idCentroTrabajoFK: 8,
+  idCargoFK: 19
+}
+{
+  _id: ObjectId('69f3af5371df916e0326ac79'),
+  nombreTrabajador: 'Oscar Ivan Calderon Pena',
+  empresaDondeTrabaja: 'TGI',
+  documentoTrabajador: 79543210,
+  idCentroTrabajoFK: 8,
+  idCargoFK: 22
+}
+{
+  _id: ObjectId('69f3af5371df916e0326ac7a'),
+  nombreTrabajador: 'Liliana Marcela Reyes Cano',
+  empresaDondeTrabaja: 'TGI',
+  documentoTrabajador: 1087654321,
+  idCentroTrabajoFK: 9,
+  idCargoFK: 4
+}
+{
+  _id: ObjectId('69f3af5371df916e0326ac7b'),
+  nombreTrabajador: 'Ferney Andres Aguilar Leal',
+  empresaDondeTrabaja: 'TGI',
+  documentoTrabajador: 91876543,
+  idCentroTrabajoFK: 9,
+  idCargoFK: 1
+}
+{
+  _id: ObjectId('69f3af5371df916e0326ac7c'),
+  nombreTrabajador: 'Natalia Esperanza Vidal Torres',
+  empresaDondeTrabaja: 'TGI',
+  documentoTrabajador: 1043219876,
+  idCentroTrabajoFK: 10,
+  idCargoFK: 7
+}
+{
+  _id: ObjectId('69f3af5371df916e0326ac7d'),
+  nombreTrabajador: 'Juan Pablo Morales Blanco',
+  empresaDondeTrabaja: 'TGI',
+  documentoTrabajador: 80654321,
+  idCentroTrabajoFK: 10,
+  idCargoFK: 13
+}
+Type "it" for more
+db.usuario.findOne({nombreUsuario: "Xavier Enrique Naar Amaris"})
+{
+  _id: ObjectId('69f8e24fd997bd61f8483c03'),
+  nombreUsuario: 'Xavier Enrique Naar Amaris',
+  rolUsuario: 'admin',
+  correoUsuario: 'xavier.naar@tgi.com.co',
+  contrasenaUsuario: 'meHanAscendidoGente',
+  estadoUsuario: 'activo'
+}
+db.usuario.findOne({'nombreUsuario': "Xavier Enrique Naar Amaris"})
+{
+  _id: ObjectId('69f8e24fd997bd61f8483c03'),
+  nombreUsuario: 'Xavier Enrique Naar Amaris',
+  rolUsuario: 'admin',
+  correoUsuario: 'xavier.naar@tgi.com.co',
+  contrasenaUsuario: 'meHanAscendidoGente',
+  estadoUsuario: 'activo'
+}
+db.usuario.find({[{$or: {rolUsuario: "admin"}, {estadoUsuario: "activo"}}]})
+SyntaxError: Unexpected token (1:47)
+
+> 1 | db.usuario.find({[{$or: {rolUsuario: "admin"}, {estadoUsuario: "activo"}}]})
+    |                                                ^
+db.usuario.find({$or: [{rolUsuario: "admin"}, {estadoUsuario: "activo"}]})
+{
+  _id: ObjectId('69f8e24fd997bd61f8483c02'),
+  nombreUsuario: 'Diana Carolina Munévar Murillo',
+  rolUsuario: 'admin',
+  correoUsuario: 'diana.munevar@tgi.com.co',
+  contrasenaUsuario: 'ConfioEnLos3Ninos',
+  estadoUsuario: 'activo'
+}
+{
+  _id: ObjectId('69f8e24fd997bd61f8483c03'),
+  nombreUsuario: 'Xavier Enrique Naar Amaris',
+  rolUsuario: 'admin',
+  correoUsuario: 'xavier.naar@tgi.com.co',
+  contrasenaUsuario: 'meHanAscendidoGente',
+  estadoUsuario: 'activo'
+}
+{
+  _id: ObjectId('69f8e24fd997bd61f8483c04'),
+  nombreUsuario: 'Ana Lucia Bernal Perez',
+  rolUsuario: 'admin',
+  correoUsuario: 'ana.bernal@tgi.com.co',
+  contrasenaUsuario: 'Admin2026*',
+  estadoUsuario: 'inactivo'
+}
+db.usuario.find({$and: [{rolUsuario: "admin"}, {estadoUsuario: "activo"}]})
