@@ -33,5 +33,5 @@ db.trabajadores.updateOne({'_id': ObjectId('69f3af5371df916e0326ac70')}, {$set: 
 69f3af5371df916e0326ac70 trabajador
 
 db.capacitacion.findOne({'tema': 'Conducción preventiva en entornos rurales'})
-db.programacion.findOne({_id: ObjectId('69f77ccd448798922d9d79f5')})
+db.programacion.findOne({_id: ObjectId('69f8e21bd997bd61f8483bb7')})
 db.trabajadores.findOne({'nombreTrabajador': 'Sandra Vargas'})
