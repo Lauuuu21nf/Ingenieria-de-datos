@@ -1,0 +1,206 @@
+// RQF020
+db.programacion.updateOne({'_id': ObjectId('69f8e21bd997bd61f8483bb7'), estadoProgramacion: {$ne: 'realizada'}}, {$set: {'estadoProgramacion': 'pendiente'}})
+69f8e21bd997bd61f8483bb7
+
+//RQF015
+db.capacitacion.updateOne({'_id': ObjectId('69f8e1aed997bd61f8483b37')}, {$set: {tema: "Conducción preventiva en entornos rurales", actividad: "Práctica de maniobras en terrenos de difícil acceso"}})
+
+
+// RQF030
+db.trabajadores.updateOne({'_id': ObjectId('69f3af5371df916e0326ac70')}, {$set: {nombreTrabajador: "Sandra Vargas"}})
+69f3af5371df916e0326ac70 trabajador
+
+db.capacitacion.findOne({'tema': 'Conducción preventiva en entornos rurales'})
+db.programacion.findOne({_id: ObjectId('69f77ccd448798922d9d79f5')})
+db.trabajadores.findOne({'nombreTrabajador': 'Sandra Vargas'})
+
+
+sort -1 = desc
+sort 1 = asc
+
+operaciones masivas mezcladas
+db.coleccion.bulkWrite([ varias operaciones dentro de la misma sentencia (insertar, modificar, reemplazar, eliminar)]), es un array de operaciones 
+
+subdocumentos
+permiten hacer consultas y manipulación (varios documentos dentro del JSON), representan manipulaciones complejas
+db.pedidos.insertOne({
+	numero: …
+	estado: …
+	cliente: {	
+		id: …,
+		nombre: …,
+		contacto: ...
+	},
+	envio: {
+	lo mismo
+	}
+
+})
+consultas para esos subdocumentos:
+db.pedidos.find({"envio.metodo": "express"})
+                        |
+            'subdocumento.propiedad': 'valor'
+
+se utilizan cuando se va a hacer solo una inserción, si se necesitan más, se hacen AGREGACIONES
+los subdocumentos siempre son parte del documento, las agregaciones no
+las agregaciones no se guardan
+
+AGREGACIONES
+cuando se crea el documento, se agrega el "producto" y se agrega el "pedido"
+
+[] si son varios
+db.coleccion.aggregate([{$match: {filtros para el match}},
+			{$group: {agrupacion que yo quiera}},
+			{$limit: 10} que solo muestre 10
+			{lo mismo}])
+
+
+
+
+use rockband
+switched to db rockband
+db.createCollection("band")
+db.band.insertOne(
+{name:"Bon Jovi",
+ country: "Estados Unidos de América",
+ url: "https://BonJovi.com",
+ album: [{
+   title: 'Crush',
+   dateCreated: new Date(1984,01,21),
+   song: [{
+     titleSong: "Just Older",
+     autor: "Bon Jovi",
+     duration: "1.30s"
+   },
+  	{titleSong: "It's My Life",
+    	autor: "Bon Jovi",
+    	duration: "2.50s"
+    }, 
+    {titleSong: "Save the World",
+    	autor: "Bon Jovi",
+     	duration: "2.30s"
+    },
+    {titleSong: "She's a Mystery",
+    autor: "Bon Jovi",
+    duration: "2.30s"
+    },
+    {titleSong: "One Wild Night",
+    autor: "Bon Jovi",
+    duration: "2.30s"}]}     
+  ,
+ {title: "New Jersey",
+   dateCreated: new Date(1988,12,19),
+   song: [{
+     titleSong: "Livin In Sin",
+     autor: "Bon Jovi",
+     duration: "1.30s"
+   },
+  	{titleSong: "Blood On Blood",
+    	autor: "Bon Jovi",
+    	duration: "2.50s"
+    }, 
+    {titleSong: "Wild Is The Wind",
+    	autor: "Bon Jovi",
+     	duration: "2.30s"
+    },
+    {titleSong: "99 In The Shade",
+    autor: "Bon Jovi",
+    duration: "2.30s"
+    },
+    {titleSong: "Love For Sale",
+    autor: "Bon Jovi",
+    duration: "2.30s"}]} 
+]}  
+)
+
+db.band.insertMany([
+  {
+    name: "Soda Stereo",
+    country: "Argentina",
+    url: "https://sodastereo.com",
+    album: [
+      {
+        title: "Canción Animal",
+        dateCreated: new Date(1990, 07, 07),
+        song: [
+          { titleSong: "De Música Ligera", autor: "Gustavo Cerati", duration: "3:32s" },
+          { titleSong: "(En) El Séptimo Día", autor: "Gustavo Cerati", duration: "4:23s" },
+          { titleSong: "Un Millón de Años Luz", autor: "Gustavo Cerati", duration: "5:03s" },
+          { titleSong: "Entre Caníbales", autor: "Gustavo Cerati", duration: "4:06s" },
+          { titleSong: "Té Para Tres", autor: "Gustavo Cerati", duration: "2:26s" }
+        ]
+      },
+      {
+        title: "Comfort y Música Para Volar",
+        dateCreated: new Date(1996, 08, 25),
+        song: [
+          { titleSong: "En la Ciudad de la Furia", autor: "Gustavo Cerati", duration: "8:42s" },
+          { titleSong: "Un Misil en mi Placard", autor: "Gustavo Cerati", duration: "4:34s" }
+        ]
+      }
+    ]
+  },
+  {
+    name: "Queen",
+    country: "Reino Unido",
+    url: "https://queenonline.com",
+    album: [
+      {
+        title: "A Night at the Opera",
+        dateCreated: new Date(1975, 10, 21),
+        song: [
+          { titleSong: "Bohemian Rhapsody", autor: "Freddie Mercury", duration: "5:55s" },
+          { titleSong: "You're My Best Friend", autor: "John Deacon", duration: "2:52s" },
+          { titleSong: "Love of My Life", autor: "Freddie Mercury", duration: "3:39s" },
+          { titleSong: "Death on Two Legs", autor: "Freddie Mercury", duration: "3:43s" },
+          { titleSong: "'39", autor: "Brian May", duration: "3:31s" }
+        ]
+      }
+    ]
+  },
+  {
+    name: "Radiohead",
+    country: "Reino Unido",
+    url: "https://radiohead.com",
+    album: [
+      {
+        title: "OK Computer",
+        dateCreated: new Date(1997, 04, 21),
+        song: [
+          { titleSong: "Paranoid Android", autor: "Thom Yorke", duration: "6:23s" },
+          { titleSong: "Karma Police", autor: "Thom Yorke", duration: "4:21s" },
+          { titleSong: "No Surprises", autor: "Thom Yorke", duration: "3:48s" },
+          { titleSong: "Exit Music", autor: "Thom Yorke", duration: "4:24s" },
+          { titleSong: "Lucky", autor: "Thom Yorke", duration: "4:19s" }
+        ]
+      }
+    ]
+  },
+  {
+    name: "Metallica",
+    country: "Estados Unidos de América",
+    url: "https://metallica.com",
+    album: [
+      {
+        title: "Master of Puppets",
+        dateCreated: new Date(1986, 02, 03),
+        song: [
+          { titleSong: "Battery", autor: "James Hetfield", duration: "5:12s" },
+          { titleSong: "Master of Puppets", autor: "James Hetfield", duration: "8:35s" },
+          { titleSong: "Welcome Home (Sanitarium)", autor: "James Hetfield", duration: "6:27s" },
+          { titleSong: "Disposable Heroes", autor: "James Hetfield", duration: "8:16s" },
+          { titleSong: "Orion", autor: "Cliff Burton", duration: "8:27s" }
+        ]
+      }
+    ]
+  }
+])
+
+
+db.band.findOne({name: "Bon Jovi"})
+db.band.findOne({name: "Soda Stereo"})
+db.band.findOne({name: "Queen"})
+db.band.findOne({name: "Radiohead"})
+db.band.findOne({name: "Metallica"})
+
+db.band.updateOne({name: "Bon Jovi"}, {$unset: {"album.$[].dateCreated": ""}})
