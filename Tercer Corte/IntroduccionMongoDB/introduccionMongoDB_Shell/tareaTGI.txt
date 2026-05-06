@@ -1,0 +1,19 @@
+use sst_tgi
+switched to db sst_tgi
+db
+sst_tgi
+show collections
+//RQF015
+db.Capacitacion.updateOne({'_id': ObjectId('69f77c95448798922d9d79b8')}, {$set: {tema: "Conducción preventiva en entornos rurales", actividad: "Práctica de maniobras en terrenos de difícil acceso"}})
+
+db.Capacitacion.findOne({'tema': 'Conducción preventiva en entornos rurales'})
+
+// RQF020
+db.Programacion.updateOne({'_id': ObjectId('69f77ccd448798922d9d79f5'), estadoProgramacion: {$ne: 'realizada'}}, {$set: {'estadoProgramacion': 'pendiente'}})
+
+db.Programacion.findOne({_id: ObjectId('69f77ccd448798922d9d79f5')})
+
+// RQF030
+db.Trabajador.updateOne({'_id': ObjectId('69f77c52448798922d9d7971')}, {$set: {nombreTrabajador: "Sandra Vargas"}})
+
+db.Trabajador.findOne({'nombreTrabajador': 'Sandra Vargas'})
