@@ -54,8 +54,9 @@ db.coleccion.aggregate([{$match: {filtros para el match}},
 			{$limit: 10} que solo muestre 10
 			{lo mismo}])
 
-
-
+============================================================================
+====================== TALLER SUBDOCUMENTOS ================================ 
+============================================================================
 
 use rockband
 switched to db rockband
@@ -203,4 +204,8 @@ db.band.findOne({name: "Queen"})
 db.band.findOne({name: "Radiohead"})
 db.band.findOne({name: "Metallica"})
 
-db.band.updateOne({name: "Bon Jovi"}, {$unset: {"album.$[].dateCreated": ""}})
+// borrando el campo dateCreated del primer album en la lista
+db.band.updateOne({"name": "Bon Jovi"}, {$unset: {"album.0.dateCreated": ""}})
+
+// Borrar todo el subdocumento songs del album "Crush" de la banda Bon Jovi
+db.band.updateOne({"name": "Bon Jovi"}, {$unset: {"album.0.song": ""}})
